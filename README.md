@@ -74,3 +74,59 @@ This can be called with e.g. http://localhost:9000/account/1234 in a browser.
 }
 
 ```
+
+## Small load test for the mock tool
+
+```
+ab -n 100000 -c 1000 http://localhost:9000/account/1
+```
+
+```
+This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 10000 requests
+...
+Finished 100000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            9000
+
+Document Path:          /account/1
+Document Length:        26 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   5.921 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      14600000 bytes
+HTML transferred:       2600000 bytes
+Requests per second:    16889.24 [#/sec] (mean)
+Time per request:       59.209 [ms] (mean)
+Time per request:       0.059 [ms] (mean, across all concurrent requests)
+Transfer rate:          2408.04 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   27   4.1     27      50
+Processing:    10   32   5.8     31      71
+Waiting:        1   23   5.7     22      62
+Total:         33   59   4.6     58      87
+
+Percentage of the requests served within a certain time (ms)
+  50%     58
+  66%     59
+  75%     61
+  80%     62
+  90%     65
+  95%     68
+  98%     71
+  99%     72
+ 100%     87 (longest request)
+
+
+```
