@@ -1,11 +1,11 @@
 package main
 
 import (
-	"log"
-	"net/http"
+	"github.com/prodyna/go-rest-mock/handler"
 	"github.com/prodyna/go-rest-mock/model"
 	"github.com/prodyna/go-rest-mock/reader"
-	"github.com/prodyna/go-rest-mock/handler"
+	"log"
+	"net/http"
 )
 
 func main() {
