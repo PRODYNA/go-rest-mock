@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/prodyna/go-rest-mock/model"
+	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -75,6 +76,13 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	if !validate(req) {
+		w.Header().Set(ContentType, AppJson)
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "{ \"error\" : \"Body is invalid\" }")
+		return
+	}
+
 	reqPath := req.URL.Path
 	method := req.Method
 	contentType := getContentType(req)
@@ -102,7 +110,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set(ContentType, AppJson)
 	w.WriteHeader(404)
-	fmt.Fprintf(w, "\"error\" : \"no mapping for "+req.URL.Path+"\"")
+	fmt.Fprintf(w, "{\"error\" : \"no mapping for "+req.URL.Path+"\"}")
 
 }
 
@@ -136,6 +144,29 @@ func (h *Handler) getTemplatePath(reqPath string, templateKey string) *model.Pat
 	}
 
 	return nil
+}
+
+
+func validate(req *http.Request) bool {
+
+	if req.Method != "GET" && getContentType(req) == "application/json"{
+		body, err := ioutil.ReadAll(req.Body)
+		if err != nil {
+			return false
+		}
+		return isJSONString(body)
+	}
+	return true
+}
+
+
+func isJSONString(s []byte) bool {
+	if len(s) == 0 {
+		return true
+	}
+	var js map[string]interface{}
+	return json.Unmarshal([]byte(s), &js) == nil
+
 }
 
 /**

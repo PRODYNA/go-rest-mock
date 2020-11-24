@@ -1,0 +1,15 @@
+mode: set
+github.com/prodyna/go-rest-mock/handler/match.go:5.66,10.40 3 1
+github.com/prodyna/go-rest-mock/handler/match.go:14.2,16.30 2 1
+github.com/prodyna/go-rest-mock/handler/match.go:22.2,22.42 1 1
+github.com/prodyna/go-rest-mock/handler/match.go:26.2,26.27 1 1
+github.com/prodyna/go-rest-mock/handler/match.go:37.2,37.13 1 1
+github.com/prodyna/go-rest-mock/handler/match.go:10.40,12.3 1 0
+github.com/prodyna/go-rest-mock/handler/match.go:16.30,18.3 1 1
+github.com/prodyna/go-rest-mock/handler/match.go:18.8,20.3 1 1
+github.com/prodyna/go-rest-mock/handler/match.go:22.42,24.3 1 1
+github.com/prodyna/go-rest-mock/handler/match.go:26.27,30.32 3 1
+github.com/prodyna/go-rest-mock/handler/match.go:30.32,31.14 1 1
+github.com/prodyna/go-rest-mock/handler/match.go:31.14,33.5 1 1
+github.com/prodyna/go-rest-mock/handler/match.go:40.40,42.2 1 1
+github.com/prodyna/go-rest-mock/handler/match.go:44.35,46.2 1 1

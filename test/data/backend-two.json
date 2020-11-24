@@ -1,0 +1,66 @@
+{
+  "id": "backend",
+  "port": "9001",
+  "paths": [
+    {
+      "method": "GET",
+      "path": "/account/{id}",
+      "contentType": "",
+      "response": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": {
+          "hello": "from backend 1"
+        },
+        "header": {
+          "XX": "test 1"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{uid}/account/{id}",
+      "contentType": "",
+      "response": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": {
+          "hello": "from backend 2"
+        },
+        "header": {
+          "XX": "test 1"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user/{uid}/account/{id}/test",
+      "contentType": "application/json",
+      "response": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": {
+          "hello": "from backend"
+        },
+        "header": {
+          "XX": "test 1"
+        }
+      }
+    },
+    {
+      "method": "",
+      "path": "_default",
+      "contentType": "",
+      "response": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": {
+          "error": "default error message"
+        },
+        "header": {
+          "XX": "test 1"
+        }
+      }
+    }
+  ]
+}
