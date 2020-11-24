@@ -24,6 +24,7 @@ Simply call ```go build -o grmock cmd/main.go``` or ```go run cmd/main.go```
 * Multiple ports (one port for each mock configuration)
 * Setting of response headers
 * Setting of content type of the response
+* Request Validation (Json)
 
 
 ## TODOs
