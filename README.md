@@ -29,14 +29,14 @@ Simply call ```go build -o grmock cmd/main.go``` or ```go run cmd/main.go```
 
 ## TODOs
 
-* Flags for cli command, path for json files, debug mode etc.
-* Configured resposne for errors
+* Flags for cli command, debug mode
+* Configured response for errors
 * Json validation flag for request
 * Body with different content than json with property bodyRef
 * Dockerfile
 * More tests
 * Using go template engine for dynamic responses
-* Using go plugins (go 1.8 needd) for more dynamic responses
+* Using go plugins for more dynamic responses
 
 ## Precedence of matching
 
@@ -44,8 +44,15 @@ Simply call ```go build -o grmock cmd/main.go``` or ```go run cmd/main.go```
 2. If a static path matches, it will be used
 3. If a template path matches, it will be used
 4. If a "_default" path exists, it will be used
-5. Error is returned
+5. An error will be returned
  
+## Build the mock server
+
+``` go build -o mock cmd/main.go ```
+ 
+## Start the mock server
+
+``` ./mock --path ./data ```
 
 ## Example configuration
 
