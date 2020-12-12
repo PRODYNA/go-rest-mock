@@ -8,7 +8,6 @@ import (
 	"os"
 )
 
-
 // ReadDefinition reads a mock definition
 func ReadDefinition(path string) *model.MockDefinition {
 

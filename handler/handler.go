@@ -11,8 +11,8 @@ import (
 
 const (
 	defaultKey  = "||_default"
-	ContentType = "Content-Type"
-	AppJson     = "application/json"
+	contentType = "Content-Type"
+	appJson     = "application/json"
 )
 
 // Handler is the http handler
@@ -74,7 +74,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if !validate(req) {
-		w.Header().Set(ContentType, AppJson)
+		w.Header().Set(contentType, appJson)
 		w.WriteHeader(400)
 		fmt.Fprintf(w, "{ \"error\" : \"Body is invalid\" }")
 		return
@@ -105,7 +105,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	w.Header().Set(ContentType, AppJson)
+	w.Header().Set(contentType, appJson)
 	w.WriteHeader(404)
 	fmt.Fprintf(w, "{\"error\" : \"no mapping for "+req.URL.Path+"\"}")
 
@@ -171,7 +171,7 @@ func reply(w http.ResponseWriter, path model.Path) {
 	contentType := path.Response.ContentType
 	jsonString, _ := json.Marshal(body)
 
-	w.Header().Set(ContentType, contentType)
+	w.Header().Set(contentType, contentType)
 
 	for key, header := range path.Response.Header {
 		w.Header().Set(key, header)
@@ -189,7 +189,7 @@ func getContentType(req *http.Request) string {
 	} else if len(req.Header) == 0 {
 		return ""
 	} else {
-		h := req.Header[ContentType]
+		h := req.Header[contentType]
 		if h == nil {
 			return ""
 		}

@@ -21,7 +21,7 @@ func main() {
 	}
 	for i, file := range files {
 
-		md := reader.ReadDefinition(config.Path +"/" + file.Name())
+		md := reader.ReadDefinition(config.Path + "/" + file.Name())
 
 		if i == size-1 {
 			// last one blocks and prevents from exiting
