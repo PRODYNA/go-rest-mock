@@ -15,7 +15,7 @@ const (
 	AppJson     = "application/json"
 )
 
-// The Http handler
+// Handler is the http handler
 type Handler struct {
 	// static paths
 	staticMap map[string]model.Path
@@ -24,7 +24,7 @@ type Handler struct {
 	templateMap map[string]map[string]model.Path
 }
 
-// Creates a handler for the configuration.
+// NewHandler creates a handler for the configuration.
 func NewHandler(md *model.MockDefinition) *Handler {
 
 	staticMap := make(map[string]model.Path)
@@ -64,7 +64,7 @@ func (h *Handler) getDefault() *model.Path {
 	return nil
 }
 
-// A handler for one mock configuration.
+// ServeHTTP is the handler for one mock configuration.
 func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// in case you request it with a browser :-)
@@ -164,9 +164,7 @@ func isJSONString(s []byte) bool {
 
 }
 
-/**
- * Replies with the configured data.
- */
+// Replies with the configured data.
 func reply(w http.ResponseWriter, path model.Path) {
 	body := path.Response.Body
 	status := path.Response.Status
@@ -184,9 +182,7 @@ func reply(w http.ResponseWriter, path model.Path) {
 
 }
 
-/**
- * Save method for getting the content type
- */
+// Save method for getting the content type
 func getContentType(req *http.Request) string {
 	if req.Header == nil {
 		return ""

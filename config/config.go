@@ -5,13 +5,13 @@ import (
 	"os"
 )
 
-// Configuration element
+// Config is the configuration element
 type Config struct {
 	Path  string
 	Debug bool
 }
 
-// Parses the configuration from flags
+// Parse parses the configuration from flags
 func Parse() *Config {
 
 	c := Config{}

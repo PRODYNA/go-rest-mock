@@ -2,7 +2,7 @@ package handler
 
 import "strings"
 
-// Matches templates
+// MatchTemplate matches templates
 func MatchTemplate(pathElements, templateElements []string) bool {
 
 	pathSize := len(pathElements)

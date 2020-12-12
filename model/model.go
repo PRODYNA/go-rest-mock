@@ -1,6 +1,6 @@
 package model
 
-// Top level struct for the json config
+// MockDefinition is the top level struct for the json config
 type MockDefinition struct {
 	ID    string `json:"id"`
 	Port  string `json:"port"`
