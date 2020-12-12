@@ -2,6 +2,7 @@ package handler
 
 import "strings"
 
+// Matches templates
 func MatchTemplate(pathElements, templateElements []string) bool {
 
 	pathSize := len(pathElements)
@@ -37,10 +38,11 @@ func MatchTemplate(pathElements, templateElements []string) bool {
 	return true
 }
 
+// Match templates
 func Match(path, template string) bool {
-	return MatchTemplate(SplitPath(path), SplitPath(template))
+	return MatchTemplate(splitPath(path), splitPath(template))
 }
 
-func SplitPath(s string) []string {
+func splitPath(s string) []string {
 	return strings.Split(strings.Trim(s, "/"), "/")
 }

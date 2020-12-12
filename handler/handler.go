@@ -10,11 +10,12 @@ import (
 )
 
 const (
-	DefaultKey  = "||_default"
+	defaultKey  = "||_default"
 	ContentType = "Content-Type"
 	AppJson     = "application/json"
 )
 
+// The Http handler
 type Handler struct {
 	// static paths
 	staticMap map[string]model.Path
@@ -23,9 +24,7 @@ type Handler struct {
 	templateMap map[string]map[string]model.Path
 }
 
-/**
- * Creates a handler for the configuration.
- */
+// Creates a handler for the configuration.
 func NewHandler(md *model.MockDefinition) *Handler {
 
 	staticMap := make(map[string]model.Path)
@@ -58,16 +57,14 @@ func (h *Handler) getStaticPath(key string) *model.Path {
 }
 
 func (h *Handler) getDefault() *model.Path {
-	if _, ok := h.staticMap[DefaultKey]; ok {
-		p := h.staticMap[DefaultKey]
+	if _, ok := h.staticMap[defaultKey]; ok {
+		p := h.staticMap[defaultKey]
 		return &p
 	}
 	return nil
 }
 
-/**
- * A handler for one mock configuration.
- */
+// A handler for one mock configuration.
 func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	// in case you request it with a browser :-)
@@ -120,7 +117,7 @@ func (h *Handler) hasTemplate(reqPath string, templateKey string) bool {
 
 		pmap := h.templateMap[templateKey]
 
-		for k, _ := range pmap {
+		for k := range pmap {
 			if Match(reqPath, k) {
 				return true
 			}
@@ -146,10 +143,9 @@ func (h *Handler) getTemplatePath(reqPath string, templateKey string) *model.Pat
 	return nil
 }
 
-
 func validate(req *http.Request) bool {
 
-	if req.Method != "GET" && getContentType(req) == "application/json"{
+	if req.Method != "GET" && getContentType(req) == "application/json" {
 		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
 			return false
@@ -158,7 +154,6 @@ func validate(req *http.Request) bool {
 	}
 	return true
 }
-
 
 func isJSONString(s []byte) bool {
 	if len(s) == 0 {
@@ -201,8 +196,7 @@ func getContentType(req *http.Request) string {
 		h := req.Header[ContentType]
 		if h == nil {
 			return ""
-		} else {
-			return h[0]
 		}
+		return h[0]
 	}
 }

@@ -8,9 +8,8 @@ import (
 	"os"
 )
 
-/**
- * Reads a mock definition.
- */
+
+// Reads a mock definition
 func ReadDefinition(path string) *model.MockDefinition {
 
 	data, err := ioutil.ReadFile(path)
@@ -29,9 +28,7 @@ func ReadDefinition(path string) *model.MockDefinition {
 	return &mockDefinition
 }
 
-/**
- *	Reads the config files in the given directory.
- */
+// Reads the config files in the given directory.
 func ReadFiles(path string) []os.FileInfo {
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
