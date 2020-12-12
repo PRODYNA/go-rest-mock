@@ -1,3 +1,9 @@
+
+[![Project status](https://img.shields.io/badge/version-v0-green.svg)](https://github.com/prodyna/go-rest-mock/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/prodyna/go-rest-mock)](https://goreportcard.com/report/github.com/prodyna/go-rest-mock)
+[![License](https://img.shields.io/dub/l/vibe-d.svg)](LICENSE.md)
+[![Coverage Status](https://coveralls.io/repos/github/prodyna/go-rest-mock/badge.svg?branch=master)](https://coveralls.io/github/prodyna/go-rest-mock)
+
 # go-rest-mock
 Simple, but powerful mock tool for ReST.
 
