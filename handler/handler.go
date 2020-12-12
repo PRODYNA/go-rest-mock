@@ -157,7 +157,7 @@ func validate(req *http.Request) bool {
 
 func isJSONString(s []byte) bool {
 	if len(s) == 0 {
-		return true
+		return false
 	}
 	var js map[string]interface{}
 	return json.Unmarshal([]byte(s), &js) == nil
