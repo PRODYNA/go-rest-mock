@@ -18,7 +18,11 @@ Simple, but powerful mock tool for ReST.
 
 ## Build
 
-Simply call ```go build -o grmock cmd/main.go``` or ```go run cmd/main.go```
+Build the binary
+ ```go build -o go-rest-mock cmd/main.go```
+ 
+ run it with
+ ```./go-rest-mock -path "test/data"```
 
 ## Supported features
 
