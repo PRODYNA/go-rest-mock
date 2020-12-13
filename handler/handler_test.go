@@ -178,7 +178,7 @@ func TestHandler_ServeHTTP(t *testing.T) {
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1,p2},
+		Paths: []model.Path{p1, p2},
 	}
 	h := NewHandler(&m)
 
@@ -189,12 +189,9 @@ func TestHandler_ServeHTTP(t *testing.T) {
 	r.URL = &url.URL{Path: "/api/v1/user/33"}
 	h.ServeHTTP(MockResponseWriter{}, &r)
 
-
 	r.URL = &url.URL{Path: "/api/v1/user/33"}
 	r.Body = ioutil.NopCloser(strings.NewReader("{-}"))
 	r.Header = http.Header{}
 	r.Header["Content-Type"] = []string{"application/json"}
 	h.ServeHTTP(MockResponseWriter{}, &r)
 }
-
-

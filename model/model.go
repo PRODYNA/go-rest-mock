@@ -11,7 +11,7 @@ type MockDefinition struct {
 type Response struct {
 	Status      int               `json:"status"`
 	ContentType string            `json:"contentType"`
-	Body        map[string]string `json:"body",omitempty`
+	Body        map[string]string `json:"body"`
 	// TODO reference to an external file
 	BodyRef string            `json:"bodyRef,omitempty"`
 	Header  map[string]string `json:"header,omitempty"`
