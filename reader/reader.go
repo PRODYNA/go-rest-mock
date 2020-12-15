@@ -14,14 +14,16 @@ func ReadDefinition(path string) *model.MockDefinition {
 	data, err := ioutil.ReadFile(path)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return nil
 	}
 
 	var mockDefinition model.MockDefinition
 
 	err = json.Unmarshal(data, &mockDefinition)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return nil
 	}
 
 	return &mockDefinition
@@ -31,7 +33,8 @@ func ReadDefinition(path string) *model.MockDefinition {
 func ReadFiles(path string) []os.FileInfo {
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return nil
 	}
 	return files
 }

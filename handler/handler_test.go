@@ -185,13 +185,20 @@ func TestHandler_ServeHTTP(t *testing.T) {
 	}
 
 	p2 := model.Path{
+		Method:      "POST",
+		Path:        "/api/v1/book",
+		ContentType: "application/json",
+		Response:    model.Response{},
+	}
+
+	p3 := model.Path{
 		Method:      "",
 		Path:        "_default",
 		ContentType: "",
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1, p2},
+		Paths: []model.Path{p1, p2, p3},
 	}
 	h := NewHandler(&m, c)
 
@@ -206,5 +213,15 @@ func TestHandler_ServeHTTP(t *testing.T) {
 	r.Body = ioutil.NopCloser(strings.NewReader("{-}"))
 	r.Header = http.Header{}
 	r.Header["Content-Type"] = []string{"application/json"}
+	h.ServeHTTP(MockResponseWriter{}, &r)
+
+	r.Method = "POST"
+	r.URL = &url.URL{Path: "/api/v1/book"}
+	r.Header["Content-Type"] = []string{"application/json"}
+	r.Body = ioutil.NopCloser(strings.NewReader("{}"))
+	h.ServeHTTP(MockResponseWriter{}, &r)
+
+	r.Method = "GET"
+	r.URL = &url.URL{Path: "/favicon.ico"}
 	h.ServeHTTP(MockResponseWriter{}, &r)
 }
