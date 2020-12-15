@@ -4,10 +4,25 @@
   "paths": [
     {
       "method": "GET",
-      "path": "/account/{id}",
+      "path": "/account/200",
       "contentType": "",
       "response": {
         "status": 200,
+        "contentType": "application/json",
+        "body": {
+          "hello": "from backend 1"
+        },
+        "header": {
+          "XX": "test 1"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account/400",
+      "contentType": "",
+      "response": {
+        "status": 426,
         "contentType": "application/json",
         "body": {
           "hello": "from backend 1"
@@ -24,9 +39,7 @@
       "response": {
         "status": 200,
         "contentType": "application/json",
-        "body": {
-          "hello": "from backend 2"
-        },
+        "bodyRef": "backend/fileresponse.json",
         "header": {
           "XX": "test 1"
         }

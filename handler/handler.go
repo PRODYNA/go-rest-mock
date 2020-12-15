@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/prodyna/go-rest-mock/config"
 	"github.com/prodyna/go-rest-mock/model"
 	"io/ioutil"
 	"net/http"
@@ -22,10 +23,12 @@ type Handler struct {
 
 	// paths with templates. first key is method and content type, second key is path
 	templateMap map[string]map[string]model.Path
+
+	config *config.Config
 }
 
 // NewHandler creates a handler for the configuration.
-func NewHandler(md *model.MockDefinition) *Handler {
+func NewHandler(md *model.MockDefinition, conf *config.Config) *Handler {
 
 	staticMap := make(map[string]model.Path)
 	templateMap := make(map[string]map[string]model.Path)
@@ -45,7 +48,7 @@ func NewHandler(md *model.MockDefinition) *Handler {
 		}
 	}
 
-	return &Handler{staticMap: staticMap, templateMap: templateMap}
+	return &Handler{staticMap: staticMap, templateMap: templateMap, config: conf}
 }
 
 func (h *Handler) getStaticPath(key string) *model.Path {
@@ -89,19 +92,19 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	staticPath := h.getStaticPath(key)
 	if staticPath != nil {
-		reply(w, *staticPath)
+		reply(w, *staticPath, h.config)
 		return
 	}
 
 	templatePath := h.getTemplatePath(reqPath, templateKey)
 	if templatePath != nil {
-		reply(w, *templatePath)
+		reply(w, *templatePath, h.config)
 		return
 	}
 
 	defaultPath := h.getDefault()
 	if defaultPath != nil {
-		reply(w, *defaultPath)
+		reply(w, *defaultPath, h.config)
 		return
 	}
 
@@ -165,11 +168,17 @@ func isJSONString(s []byte) bool {
 }
 
 // Replies with the configured data.
-func reply(w http.ResponseWriter, path model.Path) {
-	body := path.Response.Body
+func reply(w http.ResponseWriter, path model.Path, cfg *config.Config) {
+
 	status := path.Response.Status
 	contentType := path.Response.ContentType
-	jsonString, _ := json.Marshal(body)
+	var respBody []byte
+	if path.Response.BodyRef != "" {
+		respBody, _ = ioutil.ReadFile(cfg.Path + "/" + path.Response.BodyRef)
+	} else {
+		body := path.Response.Body
+		respBody, _ = json.Marshal(body)
+	}
 
 	w.Header().Set(contentType, contentType)
 
@@ -178,7 +187,7 @@ func reply(w http.ResponseWriter, path model.Path) {
 	}
 
 	w.WriteHeader(status)
-	w.Write(jsonString)
+	w.Write(respBody)
 
 }
 

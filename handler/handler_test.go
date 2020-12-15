@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/prodyna/go-rest-mock/config"
 	"github.com/prodyna/go-rest-mock/model"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
@@ -11,6 +12,8 @@ import (
 )
 
 func TestHandler_NewHandler(t *testing.T) {
+
+	c := &config.Config{}
 
 	p1 := model.Path{
 		Method:      "GET",
@@ -33,7 +36,7 @@ func TestHandler_NewHandler(t *testing.T) {
 	m := model.MockDefinition{
 		Paths: []model.Path{p1, p2, p3},
 	}
-	NewHandler(&m)
+	NewHandler(&m, c)
 }
 
 func Test_validate(t *testing.T) {
@@ -70,6 +73,7 @@ func Test_getContentType(t *testing.T) {
 
 func Test_getTemplatePath(t *testing.T) {
 
+	c := &config.Config{}
 	p1 := model.Path{
 		Method:      "GET",
 		Path:        "/test/{test}/user/{id}",
@@ -80,7 +84,7 @@ func Test_getTemplatePath(t *testing.T) {
 	m := model.MockDefinition{
 		Paths: []model.Path{p1},
 	}
-	h := NewHandler(&m)
+	h := NewHandler(&m, c)
 
 	p := h.getTemplatePath("/test/{test}/user/{id}", "GET|application/json")
 	assert.Equal(t, &p1, p)
@@ -89,6 +93,8 @@ func Test_getTemplatePath(t *testing.T) {
 
 func Test_hasTemplate(t *testing.T) {
 
+	c := &config.Config{}
+
 	p1 := model.Path{
 		Method:      "GET",
 		Path:        "/test/{test}/user/{id}",
@@ -99,7 +105,7 @@ func Test_hasTemplate(t *testing.T) {
 	m := model.MockDefinition{
 		Paths: []model.Path{p1},
 	}
-	h := NewHandler(&m)
+	h := NewHandler(&m, c)
 
 	p := h.hasTemplate("", "")
 	assert.Equal(t, false, p)
@@ -112,6 +118,9 @@ func Test_hasTemplate(t *testing.T) {
 }
 
 func Test_getDefault(t *testing.T) {
+
+	c := &config.Config{}
+
 	p1 := model.Path{
 		Method:      "",
 		Path:        "_default",
@@ -121,13 +130,15 @@ func Test_getDefault(t *testing.T) {
 	m := model.MockDefinition{
 		Paths: []model.Path{p1},
 	}
-	h := NewHandler(&m)
+	h := NewHandler(&m, c)
 	p := h.getDefault()
 	assert.Equal(t, &p1, p)
 
 }
 
 func Test_getStaticPath(t *testing.T) {
+	c := &config.Config{}
+
 	p1 := model.Path{
 		Method:      "POST",
 		Path:        "/api/v1/user/33",
@@ -137,7 +148,7 @@ func Test_getStaticPath(t *testing.T) {
 	m := model.MockDefinition{
 		Paths: []model.Path{p1},
 	}
-	h := NewHandler(&m)
+	h := NewHandler(&m, c)
 
 	p := h.getStaticPath("")
 	assert.Nil(t, p)
@@ -159,10 +170,12 @@ func (m MockResponseWriter) Write([]byte) (int, error) {
 func (m MockResponseWriter) WriteHeader(statusCode int) {}
 
 func TestHandler_reply(t *testing.T) {
-	reply(MockResponseWriter{}, model.Path{})
+	c := &config.Config{}
+	reply(MockResponseWriter{}, model.Path{}, c)
 }
 
 func TestHandler_ServeHTTP(t *testing.T) {
+	c := &config.Config{}
 
 	p1 := model.Path{
 		Method:      "POST",
@@ -180,7 +193,7 @@ func TestHandler_ServeHTTP(t *testing.T) {
 	m := model.MockDefinition{
 		Paths: []model.Path{p1, p2},
 	}
-	h := NewHandler(&m)
+	h := NewHandler(&m, c)
 
 	r := http.Request{}
 	r.URL = &url.URL{Path: "/api/v1/user/33/XXX"}

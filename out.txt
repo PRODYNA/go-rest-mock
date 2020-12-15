@@ -1,0 +1,5 @@
+?   	github.com/prodyna/go-rest-mock/cmd	[no test files]
+?   	github.com/prodyna/go-rest-mock/config	[no test files]
+ok  	github.com/prodyna/go-rest-mock/handler	(cached)	coverage: 85.8% of statements
+?   	github.com/prodyna/go-rest-mock/model	[no test files]
+ok  	github.com/prodyna/go-rest-mock/reader	(cached)	coverage: 75.0% of statements
