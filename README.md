@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/dub/l/vibe-d.svg)](LICENSE)
 [![Coverage Status](https://coveralls.io/repos/github/PRODYNA/go-rest-mock/badge.svg?branch=main)](https://coveralls.io/github/PRODYNA/go-rest-mock?branch=main)
 # go-rest-mock
-Simple, but powerful mock tool for ReST.
+Simple, but powerful mock tool for ReST. 
 
 **Usage**
 * Create a json file, in the test/data (see todos) directory
