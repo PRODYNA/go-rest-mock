@@ -17,6 +17,11 @@ func Test_ReadDefinition(t *testing.T) {
 	assert.NotNil(t, ReadDefinition("../test/data/backend.json"))
 }
 
+
+func Test_ReadDefinitionNoJson(t *testing.T) {
+	assert.Nil(t, ReadDefinition("../test/data/error/malicious.json"))
+}
+
 func Test_ReadDefinitionFail(t *testing.T) {
 	assert.Nil(t, ReadDefinition("."))
 }

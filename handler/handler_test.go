@@ -173,7 +173,19 @@ func (m MockResponseWriter) WriteHeader(statusCode int) {}
 func TestHandler_reply(t *testing.T) {
 	c := &config.Config{}
 	r := http.Request{}
-	reply(MockResponseWriter{}, model.Path{}, c, &r)
+	p := model.Path{}
+	p.Response = model.Response{Header: make(map[string]string)}
+	p.Response.Header["x"] = "y"
+	reply(MockResponseWriter{}, p, c, &r)
+
+	// file as response
+	p.Response.BodyRef = "../test/data/backend/fileresponse.json"
+	reply(MockResponseWriter{}, p, c, &r)
+
+	// template as response
+	p.Response.BodyRef = ""
+	p.Response.TemplateRef ="./test/data/backend/sample.tmpl"
+	reply(MockResponseWriter{}, p, c, &r)
 }
 
 func TestHandler_ServeHTTP(t *testing.T) {
