@@ -22,11 +22,24 @@
       "path": "/account/400",
       "contentType": "",
       "response": {
-        "status": 426,
+        "status": 400,
         "contentType": "application/json",
         "body": {
           "hello": "from backend 1"
         },
+        "header": {
+          "XX": "test 1"
+        }
+      }
+    }
+  ,
+    {
+      "method": "GET",
+      "path": "/account/template",
+      "contentType": "",
+      "response": {
+        "status": 200,
+        "templateRef": "backend/sample.tmpl",
         "header": {
           "XX": "test 1"
         }

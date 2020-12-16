@@ -50,6 +50,7 @@ func Test_validate(t *testing.T) {
 	assert.True(t, validate(&r))
 
 	reader = strings.NewReader("{-}")
+	r.Body = ioutil.NopCloser(reader)
 	assert.False(t, validate(&r))
 }
 
@@ -171,7 +172,8 @@ func (m MockResponseWriter) WriteHeader(statusCode int) {}
 
 func TestHandler_reply(t *testing.T) {
 	c := &config.Config{}
-	reply(MockResponseWriter{}, model.Path{}, c)
+	r := http.Request{}
+	reply(MockResponseWriter{}, model.Path{}, c, &r)
 }
 
 func TestHandler_ServeHTTP(t *testing.T) {

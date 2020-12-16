@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/prodyna/go-rest-mock/config"
 	"github.com/prodyna/go-rest-mock/model"
+	"github.com/prodyna/go-rest-mock/tmpl"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -92,19 +93,19 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	staticPath := h.getStaticPath(key)
 	if staticPath != nil {
-		reply(w, *staticPath, h.config)
+		reply(w, *staticPath, h.config, req)
 		return
 	}
 
 	templatePath := h.getTemplatePath(reqPath, templateKey)
 	if templatePath != nil {
-		reply(w, *templatePath, h.config)
+		reply(w, *templatePath, h.config, req)
 		return
 	}
 
 	defaultPath := h.getDefault()
 	if defaultPath != nil {
-		reply(w, *defaultPath, h.config)
+		reply(w, *defaultPath, h.config, req)
 		return
 	}
 
@@ -168,17 +169,11 @@ func isJSONString(s []byte) bool {
 }
 
 // Replies with the configured data.
-func reply(w http.ResponseWriter, path model.Path, cfg *config.Config) {
+func reply(w http.ResponseWriter, path model.Path, cfg *config.Config, r *http.Request) {
 
 	status := path.Response.Status
 	contentType := path.Response.ContentType
 	var respBody []byte
-	if path.Response.BodyRef != "" {
-		respBody, _ = ioutil.ReadFile(cfg.Path + "/" + path.Response.BodyRef)
-	} else {
-		body := path.Response.Body
-		respBody, _ = json.Marshal(body)
-	}
 
 	w.Header().Set(contentType, contentType)
 
@@ -187,7 +182,17 @@ func reply(w http.ResponseWriter, path model.Path, cfg *config.Config) {
 	}
 
 	w.WriteHeader(status)
-	w.Write(respBody)
+
+	if path.Response.BodyRef != "" {
+		respBody, _ = ioutil.ReadFile(cfg.Path + "/" + path.Response.BodyRef)
+		w.Write(respBody)
+	} else if path.Response.TemplateRef != "" {
+		tmpl.ConvertTemplate(w, cfg.Path + "/" + path.Response.TemplateRef, r)
+	} else {
+		body := path.Response.Body
+		respBody, _ = json.Marshal(body)
+		w.Write(respBody)
+	}
 
 }
 
