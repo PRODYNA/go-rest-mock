@@ -9,11 +9,11 @@ type MockDefinition struct {
 
 // Response definition
 type Response struct {
-	Status      int               `json:"status"`
-	ContentType string            `json:"contentType"`
-	Body        map[string]string `json:"body"`
-	BodyRef     string            `json:"bodyRef,omitempty"`
-	Header      map[string]string `json:"header,omitempty"`
+	Status      int                    `json:"status"`
+	ContentType string                 `json:"contentType"`
+	Body        map[string]interface{} `json:"body"`
+	BodyRef     string                 `json:"bodyRef,omitempty"`
+	Header      map[string]string      `json:"header,omitempty"`
 }
 
 // Path definition
