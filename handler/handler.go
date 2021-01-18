@@ -175,6 +175,9 @@ func reply(w http.ResponseWriter, path model.Path, cfg *config.Config) {
 	var respBody []byte
 	if path.Response.BodyRef != "" {
 		respBody, _ = ioutil.ReadFile(cfg.Path + "/" + path.Response.BodyRef)
+	} else if path.Response.BodyArr != nil {
+		body := path.Response.BodyArr
+		respBody, _ = json.Marshal(body)
 	} else {
 		body := path.Response.Body
 		respBody, _ = json.Marshal(body)

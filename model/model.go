@@ -12,6 +12,7 @@ type Response struct {
 	Status      int                    `json:"status"`
 	ContentType string                 `json:"contentType"`
 	Body        map[string]interface{} `json:"body"`
+	BodyArr     []interface{}          `json:"bodyArr"`
 	BodyRef     string                 `json:"bodyRef,omitempty"`
 	Header      map[string]string      `json:"header,omitempty"`
 }

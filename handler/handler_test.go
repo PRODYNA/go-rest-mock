@@ -172,25 +172,27 @@ func (m MockResponseWriter) Write([]byte) (int, error) {
 
 func (m MockResponseWriter) WriteHeader(int) {}
 
-type MockResponseWriterWithHeader struct {
+type MockResponseWriterWithRecording struct {
 	header http.Header
+	body   []byte
 }
 
-func NewMockResponseWriterWithHeader() *MockResponseWriterWithHeader {
-	return &MockResponseWriterWithHeader{
+func NewMockResponseWriterWithHeader() *MockResponseWriterWithRecording {
+	return &MockResponseWriterWithRecording{
 		header: http.Header{},
 	}
 }
 
-func (m MockResponseWriterWithHeader) Header() http.Header {
+func (m MockResponseWriterWithRecording) Header() http.Header {
 	return m.header
 }
 
-func (m MockResponseWriterWithHeader) Write([]byte) (int, error) {
+func (m *MockResponseWriterWithRecording) Write(body []byte) (int, error) {
+	m.body = body
 	return 0, nil
 }
 
-func (m MockResponseWriterWithHeader) WriteHeader(int) {}
+func (m MockResponseWriterWithRecording) WriteHeader(int) {}
 
 func TestHandler_reply(t *testing.T) {
 	c := &config.Config{}
@@ -201,7 +203,21 @@ func TestHandler_reply(t *testing.T) {
 	}
 	mrw := NewMockResponseWriterWithHeader()
 	reply(mrw, p, c)
-	assert.Equal(t, mrw.header.Get("Content-Type"), "application/json")
+	assert.Equal(t, "application/json", mrw.header.Get("Content-Type"))
+}
+
+func TestHandler_replyArray(t *testing.T) {
+	var bArr []interface{}
+	bArr = append(bArr, "first", "second")
+	c := &config.Config{}
+	p := model.Path{
+		Response: model.Response{
+			BodyArr: bArr,
+		},
+	}
+	mrw := NewMockResponseWriterWithHeader()
+	reply(mrw, p, c)
+	assert.Equal(t, "[\"first\",\"second\"]", string(mrw.body))
 }
 
 func TestHandler_ServeHTTP(t *testing.T) {
