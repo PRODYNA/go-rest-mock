@@ -69,6 +69,9 @@ func Test_getContentType(t *testing.T) {
 
 	r.Header.Set("content-type", "text/plain")
 	assert.Equal(t, "text/plain", getContentType(&r))
+
+	r.Header.Set("content-type", "application/json")
+	assert.Equal(t, "application/json", getContentType(&r))
 }
 
 func Test_getTemplatePath(t *testing.T) {
@@ -167,11 +170,38 @@ func (m MockResponseWriter) Write([]byte) (int, error) {
 	return 0, nil
 }
 
-func (m MockResponseWriter) WriteHeader(statusCode int) {}
+func (m MockResponseWriter) WriteHeader(int) {}
+
+type MockResponseWriterWithHeader struct {
+	header http.Header
+}
+
+func NewMockResponseWriterWithHeader() *MockResponseWriterWithHeader {
+	return &MockResponseWriterWithHeader{
+		header: http.Header{},
+	}
+}
+
+func (m MockResponseWriterWithHeader) Header() http.Header {
+	return m.header
+}
+
+func (m MockResponseWriterWithHeader) Write([]byte) (int, error) {
+	return 0, nil
+}
+
+func (m MockResponseWriterWithHeader) WriteHeader(int) {}
 
 func TestHandler_reply(t *testing.T) {
 	c := &config.Config{}
-	reply(MockResponseWriter{}, model.Path{}, c)
+	p := model.Path{
+		Response: model.Response{
+			ContentType: "application/json",
+		},
+	}
+	mrw := NewMockResponseWriterWithHeader()
+	reply(mrw, p, c)
+	assert.Equal(t, mrw.header.Get("Content-Type"), "application/json")
 }
 
 func TestHandler_ServeHTTP(t *testing.T) {

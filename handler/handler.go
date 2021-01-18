@@ -171,7 +171,7 @@ func isJSONString(s []byte) bool {
 func reply(w http.ResponseWriter, path model.Path, cfg *config.Config) {
 
 	status := path.Response.Status
-	contentType := path.Response.ContentType
+	respContentType := path.Response.ContentType
 	var respBody []byte
 	if path.Response.BodyRef != "" {
 		respBody, _ = ioutil.ReadFile(cfg.Path + "/" + path.Response.BodyRef)
@@ -180,7 +180,7 @@ func reply(w http.ResponseWriter, path model.Path, cfg *config.Config) {
 		respBody, _ = json.Marshal(body)
 	}
 
-	w.Header().Set(contentType, contentType)
+	w.Header().Set(contentType, respContentType)
 
 	for key, header := range path.Response.Header {
 		w.Header().Set(key, header)
@@ -188,7 +188,6 @@ func reply(w http.ResponseWriter, path model.Path, cfg *config.Config) {
 
 	w.WriteHeader(status)
 	w.Write(respBody)
-
 }
 
 // Save method for getting the content type
