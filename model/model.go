@@ -1,5 +1,7 @@
 package model
 
+import "encoding/json"
+
 // MockDefinition is the top level struct for the json config
 type MockDefinition struct {
 	ID    string `json:"id"`
@@ -9,11 +11,11 @@ type MockDefinition struct {
 
 // Response definition
 type Response struct {
-	Status      int                    `json:"status"`
-	ContentType string                 `json:"contentType"`
-	Body        map[string]interface{} `json:"body"`
-	BodyRef     string                 `json:"bodyRef,omitempty"`
-	Header      map[string]string      `json:"header,omitempty"`
+	Status      int               `json:"status"`
+	ContentType string            `json:"contentType"`
+	Body        json.RawMessage   `json:"body"`
+	BodyRef     string            `json:"bodyRef,omitempty"`
+	Header      map[string]string `json:"header,omitempty"`
 }
 
 // Path definition

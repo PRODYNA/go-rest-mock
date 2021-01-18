@@ -176,8 +176,7 @@ func reply(w http.ResponseWriter, path model.Path, cfg *config.Config) {
 	if path.Response.BodyRef != "" {
 		respBody, _ = ioutil.ReadFile(cfg.Path + "/" + path.Response.BodyRef)
 	} else {
-		body := path.Response.Body
-		respBody, _ = json.Marshal(body)
+		respBody = path.Response.Body
 	}
 
 	w.Header().Set(contentType, respContentType)
