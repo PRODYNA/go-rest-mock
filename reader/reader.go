@@ -18,7 +18,9 @@ func ReadDefinition(path string) *model.MockDefinition {
 		return nil
 	}
 
-	var mockDefinition model.MockDefinition
+	mockDefinition := model.MockDefinition{
+		Validate: true,
+	}
 
 	err = json.Unmarshal(data, &mockDefinition)
 	if err != nil {

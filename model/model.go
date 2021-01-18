@@ -4,9 +4,10 @@ import "encoding/json"
 
 // MockDefinition is the top level struct for the json config
 type MockDefinition struct {
-	ID    string `json:"id"`
-	Port  string `json:"port"`
-	Paths []Path `json:"paths"`
+	ID       string `json:"id"`
+	Port     string `json:"port"`
+	Paths    []Path `json:"paths"`
+	Validate bool   `json:"validate"`
 }
 
 // Response definition
