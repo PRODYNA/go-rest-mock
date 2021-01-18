@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"github.com/prodyna/go-rest-mock/config"
 	"github.com/prodyna/go-rest-mock/model"
 	"github.com/stretchr/testify/assert"
@@ -207,12 +208,10 @@ func TestHandler_reply(t *testing.T) {
 }
 
 func TestHandler_replyArray(t *testing.T) {
-	var bArr []interface{}
-	bArr = append(bArr, "first", "second")
 	c := &config.Config{}
 	p := model.Path{
 		Response: model.Response{
-			BodyArr: bArr,
+			Body: json.RawMessage("[\"first\",\"second\"]"),
 		},
 	}
 	mrw := NewMockResponseWriterWithHeader()
