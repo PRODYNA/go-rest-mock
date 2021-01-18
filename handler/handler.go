@@ -77,6 +77,11 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	err := req.ParseMultipartForm(32<<20)
+	if err != nil{
+		fmt.Println(err)
+	}
+
 	if !validate(req) {
 		w.Header().Set(contentType, appJson)
 		w.WriteHeader(400)
