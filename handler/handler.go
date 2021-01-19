@@ -24,7 +24,8 @@ type Handler struct {
 	// paths with templates. first key is method and content type, second key is path
 	templateMap map[string]map[string]model.Path
 
-	config *config.Config
+	config   *config.Config
+	validate bool
 }
 
 // NewHandler creates a handler for the configuration.
@@ -48,7 +49,7 @@ func NewHandler(md *model.MockDefinition, conf *config.Config) *Handler {
 		}
 	}
 
-	return &Handler{staticMap: staticMap, templateMap: templateMap, config: conf}
+	return &Handler{staticMap: staticMap, templateMap: templateMap, config: conf, validate: md.Validate}
 }
 
 func (h *Handler) getStaticPath(key string) *model.Path {
@@ -76,7 +77,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if !validate(req) {
+	if h.validate && !validate(req) {
 		w.Header().Set(contentType, appJson)
 		w.WriteHeader(400)
 		fmt.Fprintf(w, "{ \"error\" : \"Body is invalid\" }")

@@ -35,7 +35,8 @@ func TestHandler_NewHandler(t *testing.T) {
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1, p2, p3},
+		Paths:    []model.Path{p1, p2, p3},
+		Validate: true,
 	}
 	NewHandler(&m, c)
 }
@@ -86,7 +87,8 @@ func Test_getTemplatePath(t *testing.T) {
 	}
 
 	m := model.MockDefinition{
-		Paths: []model.Path{p1},
+		Paths:    []model.Path{p1},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 
@@ -107,7 +109,8 @@ func Test_hasTemplate(t *testing.T) {
 	}
 
 	m := model.MockDefinition{
-		Paths: []model.Path{p1},
+		Paths:    []model.Path{p1},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 
@@ -132,7 +135,8 @@ func Test_getDefault(t *testing.T) {
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1},
+		Paths:    []model.Path{p1},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 	p := h.getDefault()
@@ -150,7 +154,8 @@ func Test_getStaticPath(t *testing.T) {
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1},
+		Paths:    []model.Path{p1},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 
@@ -243,7 +248,8 @@ func TestHandler_ServeHTTP(t *testing.T) {
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1, p2, p3},
+		Paths:    []model.Path{p1, p2, p3},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 
@@ -269,4 +275,64 @@ func TestHandler_ServeHTTP(t *testing.T) {
 	r.Method = "GET"
 	r.URL = &url.URL{Path: "/favicon.ico"}
 	h.ServeHTTP(MockResponseWriter{}, &r)
+}
+
+func TestHandler_ServeHTTP_Validation(t *testing.T) {
+	c := &config.Config{}
+
+	p1 := model.Path{
+		Method:      "POST",
+		Path:        "/api/v1/book",
+		ContentType: "application/json",
+		Response:    model.Response{},
+	}
+
+	m := model.MockDefinition{
+		Paths:    []model.Path{p1},
+		Validate: true,
+	}
+	h := NewHandler(&m, c)
+
+	r := http.Request{}
+	r.Header = http.Header{}
+
+	r.Method = "POST"
+	r.URL = &url.URL{Path: "/api/v1/book"}
+	r.Header["Content-Type"] = []string{"application/json"}
+	r.Body = ioutil.NopCloser(strings.NewReader(""))
+
+	mrw := NewMockResponseWriterWithHeader()
+	h.ServeHTTP(mrw, &r)
+
+	assert.Equal(t, string(mrw.body), "{ \"error\" : \"Body is invalid\" }")
+}
+
+func TestHandler_ServeHTTP_NoValidation(t *testing.T) {
+	c := &config.Config{}
+
+	p1 := model.Path{
+		Method:      "POST",
+		Path:        "/api/v1/book",
+		ContentType: "application/json",
+		Response:    model.Response{},
+	}
+
+	m := model.MockDefinition{
+		Paths:    []model.Path{p1},
+		Validate: false,
+	}
+	h := NewHandler(&m, c)
+
+	r := http.Request{}
+	r.Header = http.Header{}
+
+	r.Method = "POST"
+	r.URL = &url.URL{Path: "/api/v1/book"}
+	r.Header["Content-Type"] = []string{"application/json"}
+	r.Body = ioutil.NopCloser(strings.NewReader(""))
+
+	mrw := NewMockResponseWriterWithHeader()
+	h.ServeHTTP(mrw, &r)
+
+	assert.Equal(t, string(mrw.body), "")
 }

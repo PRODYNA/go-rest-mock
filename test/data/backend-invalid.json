@@ -1,0 +1,29 @@
+{
+  "id": "backend",
+  "port": "9002",
+  "validate": false
+  "paths": [
+    {
+      "method": "POST",
+      "path": "/invalid/200",
+      "contentType": "application/json",
+      "response": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": {}
+      }
+    },
+    {
+      "method": "",
+      "path": "_default",
+      "contentType": "",
+      "response": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": {
+          "error": "default error message"
+        }
+      }
+    }
+  ]
+}
