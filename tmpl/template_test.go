@@ -57,11 +57,14 @@ func Test_ConvertTemplate(t *testing.T) {
 
 
 func Test_Template(t *testing.T) {
-	r := &http.Request{}
+	r := &http.Request{
+		Method: "GET",
+	}
 	r.URL = &url.URL{}
 	m := NewMockResponseWriterWithHeader()
 	err :=  ConvertTemplate(m, "../test/data/backend/sample.tmpl", r)
 	assert.Nil(t, err)
 
 	assert.Contains(t, string(m.body), "\"length\" : \"4\"")
+	assert.Contains(t, string(m.body), "\"method\" : \"GET\"")
 }

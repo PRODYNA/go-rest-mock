@@ -8,9 +8,6 @@ import (
 
 type TemplateHandler struct {
 	AbsCount int64
-	// TODO define variables
-
-	//  TODO define functions
 
 	// count()
 	// everyCount(int)
@@ -29,8 +26,6 @@ type TemplateHandler struct {
 	// DayOfWeek()
 	// Year()
 	// Month()
-
-
 	// Replace(x,y)
 
 }
