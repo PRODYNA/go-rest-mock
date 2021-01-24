@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"github.com/prodyna/go-rest-mock/config"
 	"github.com/prodyna/go-rest-mock/model"
 	"github.com/stretchr/testify/assert"
@@ -34,7 +35,8 @@ func TestHandler_NewHandler(t *testing.T) {
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1, p2, p3},
+		Paths:    []model.Path{p1, p2, p3},
+		Validate: true,
 	}
 	NewHandler(&m, c)
 }
@@ -70,6 +72,9 @@ func Test_getContentType(t *testing.T) {
 
 	r.Header.Set("content-type", "text/plain")
 	assert.Equal(t, "text/plain", getContentType(&r))
+
+	r.Header.Set("content-type", "application/json")
+	assert.Equal(t, "application/json", getContentType(&r))
 }
 
 func Test_getTemplatePath(t *testing.T) {
@@ -83,7 +88,8 @@ func Test_getTemplatePath(t *testing.T) {
 	}
 
 	m := model.MockDefinition{
-		Paths: []model.Path{p1},
+		Paths:    []model.Path{p1},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 
@@ -104,7 +110,8 @@ func Test_hasTemplate(t *testing.T) {
 	}
 
 	m := model.MockDefinition{
-		Paths: []model.Path{p1},
+		Paths:    []model.Path{p1},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 
@@ -129,7 +136,8 @@ func Test_getDefault(t *testing.T) {
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1},
+		Paths:    []model.Path{p1},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 	p := h.getDefault()
@@ -147,7 +155,8 @@ func Test_getStaticPath(t *testing.T) {
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1},
+		Paths:    []model.Path{p1},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 
@@ -168,10 +177,33 @@ func (m MockResponseWriter) Write([]byte) (int, error) {
 	return 0, nil
 }
 
-func (m MockResponseWriter) WriteHeader(statusCode int) {}
+func (m MockResponseWriter) WriteHeader(int) {}
+
+type MockResponseWriterWithRecording struct {
+	header http.Header
+	body   []byte
+}
+
+func NewMockResponseWriterWithHeader() *MockResponseWriterWithRecording {
+	return &MockResponseWriterWithRecording{
+		header: http.Header{},
+	}
+}
+
+func (m MockResponseWriterWithRecording) Header() http.Header {
+	return m.header
+}
+
+func (m *MockResponseWriterWithRecording) Write(body []byte) (int, error) {
+	m.body = body
+	return 0, nil
+}
+
+func (m MockResponseWriterWithRecording) WriteHeader(int) {}
 
 func TestHandler_reply(t *testing.T) {
 	c := &config.Config{}
+<<<<<<< HEAD
 	r := http.Request{}
 	p := model.Path{}
 	p.Response = model.Response{Header: make(map[string]string)}
@@ -186,6 +218,28 @@ func TestHandler_reply(t *testing.T) {
 	p.Response.BodyRef = ""
 	p.Response.TemplateRef ="./test/data/backend/sample.tmpl"
 	reply(MockResponseWriter{}, p, c, &r)
+=======
+	p := model.Path{
+		Response: model.Response{
+			ContentType: "application/json",
+		},
+	}
+	mrw := NewMockResponseWriterWithHeader()
+	reply(mrw, p, c)
+	assert.Equal(t, "application/json", mrw.header.Get("Content-Type"))
+}
+
+func TestHandler_replyArray(t *testing.T) {
+	c := &config.Config{}
+	p := model.Path{
+		Response: model.Response{
+			Body: json.RawMessage("[\"first\",\"second\"]"),
+		},
+	}
+	mrw := NewMockResponseWriterWithHeader()
+	reply(mrw, p, c)
+	assert.Equal(t, "[\"first\",\"second\"]", string(mrw.body))
+>>>>>>> main
 }
 
 func TestHandler_ServeHTTP(t *testing.T) {
@@ -212,7 +266,8 @@ func TestHandler_ServeHTTP(t *testing.T) {
 		Response:    model.Response{},
 	}
 	m := model.MockDefinition{
-		Paths: []model.Path{p1, p2, p3},
+		Paths:    []model.Path{p1, p2, p3},
+		Validate: true,
 	}
 	h := NewHandler(&m, c)
 
@@ -238,4 +293,64 @@ func TestHandler_ServeHTTP(t *testing.T) {
 	r.Method = "GET"
 	r.URL = &url.URL{Path: "/favicon.ico"}
 	h.ServeHTTP(MockResponseWriter{}, &r)
+}
+
+func TestHandler_ServeHTTP_Validation(t *testing.T) {
+	c := &config.Config{}
+
+	p1 := model.Path{
+		Method:      "POST",
+		Path:        "/api/v1/book",
+		ContentType: "application/json",
+		Response:    model.Response{},
+	}
+
+	m := model.MockDefinition{
+		Paths:    []model.Path{p1},
+		Validate: true,
+	}
+	h := NewHandler(&m, c)
+
+	r := http.Request{}
+	r.Header = http.Header{}
+
+	r.Method = "POST"
+	r.URL = &url.URL{Path: "/api/v1/book"}
+	r.Header["Content-Type"] = []string{"application/json"}
+	r.Body = ioutil.NopCloser(strings.NewReader(""))
+
+	mrw := NewMockResponseWriterWithHeader()
+	h.ServeHTTP(mrw, &r)
+
+	assert.Equal(t, string(mrw.body), "{ \"error\" : \"Body is invalid\" }")
+}
+
+func TestHandler_ServeHTTP_NoValidation(t *testing.T) {
+	c := &config.Config{}
+
+	p1 := model.Path{
+		Method:      "POST",
+		Path:        "/api/v1/book",
+		ContentType: "application/json",
+		Response:    model.Response{},
+	}
+
+	m := model.MockDefinition{
+		Paths:    []model.Path{p1},
+		Validate: false,
+	}
+	h := NewHandler(&m, c)
+
+	r := http.Request{}
+	r.Header = http.Header{}
+
+	r.Method = "POST"
+	r.URL = &url.URL{Path: "/api/v1/book"}
+	r.Header["Content-Type"] = []string{"application/json"}
+	r.Body = ioutil.NopCloser(strings.NewReader(""))
+
+	mrw := NewMockResponseWriterWithHeader()
+	h.ServeHTTP(mrw, &r)
+
+	assert.Equal(t, string(mrw.body), "")
 }

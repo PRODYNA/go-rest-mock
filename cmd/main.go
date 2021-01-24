@@ -7,6 +7,7 @@ import (
 	"github.com/prodyna/go-rest-mock/reader"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 func main() {
@@ -16,7 +17,12 @@ func main() {
 	files := reader.ReadFiles(cfg.Path)
 	size := len(files)
 	if size == 0 {
-		log.Println("No mock definitions found in path " + cfg.Path)
+		fullPath, err := filepath.Abs(cfg.Path)
+		if err == nil {
+			log.Println("No mock definitions found in path " + fullPath)
+		} else {
+			log.Println("No mock definitions found in path " + cfg.Path)
+		}
 		return
 	}
 	for i, file := range files {
@@ -41,5 +47,6 @@ func main() {
 
 func runServer(md *model.MockDefinition, cfg *config.Config) {
 	log.Println("Starting mock on port:", md.Port, "for backend:", md.ID)
+	log.SetFlags(log.Llongfile)
 	log.Fatal(http.ListenAndServe(":"+md.Port, handler.NewHandler(md, cfg)))
 }

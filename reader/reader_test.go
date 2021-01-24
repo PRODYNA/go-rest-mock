@@ -14,7 +14,9 @@ func Test_ReadFilesFail(t *testing.T) {
 }
 
 func Test_ReadDefinition(t *testing.T) {
-	assert.NotNil(t, ReadDefinition("../test/data/backend.json"))
+	def := ReadDefinition("../test/data/backend.json")
+	assert.NotNil(t, def)
+	assert.True(t, def.Validate)
 }
 
 
