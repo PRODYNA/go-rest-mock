@@ -1,7 +1,6 @@
 package tmpl
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"text/template"
@@ -39,17 +38,15 @@ type TemplateHandler struct {
 // ConvertTemplate loads a template and executes it with the http request data
 func ConvertTemplate(w http.ResponseWriter, path string, r *http.Request) error {
 
-	b, err := ioutil.ReadFile(path)
+	templateFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		return err
 	}
 
-	tmp := template.Must(template.New("").Funcs(functions()).Parse(string(b)))
+	tmp := template.Must(template.New("").Funcs(functions()).Parse(string(templateFile)))
 
 	err = tmp.Execute(w, r)
-	if err != nil {
-		fmt.Println(err)
-	}
+
 	return err
 }
 

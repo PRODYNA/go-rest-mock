@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/prodyna/go-rest-mock/config"
 	"github.com/prodyna/go-rest-mock/model"
+	"github.com/prodyna/go-rest-mock/tmpl"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -187,7 +188,12 @@ func reply(w http.ResponseWriter, path model.Path, cfg *config.Config, r *http.R
 	}
 
 	w.WriteHeader(status)
-	w.Write(respBody)
+
+	if path.Response.TemplateRef != "" {
+		tmpl.ConvertTemplate(w,path.Response.TemplateRef, r)
+	} else {
+		w.Write(respBody)
+	}
 }
 
 // Save method for getting the content type

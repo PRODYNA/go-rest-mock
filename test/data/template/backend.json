@@ -1,0 +1,19 @@
+{
+  "id": "backend",
+  "port": "9000",
+  "paths": [
+    {
+      "method": "GET",
+      "path": "/account/200",
+      "contentType": "",
+      "response": {
+        "status": 200,
+        "contentType": "application/json",
+        "templateRef" : "test/data/template/responseTemplate.tmpl",
+        "header": {
+          "XX": "test 1"
+        }
+      }
+    }
+  ]
+}
