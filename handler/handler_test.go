@@ -52,7 +52,6 @@ func Test_validate(t *testing.T) {
 	assert.True(t, validate(&r))
 
 	reader = strings.NewReader("{-}")
-	r.Body = ioutil.NopCloser(reader)
 	assert.False(t, validate(&r))
 }
 
@@ -203,22 +202,6 @@ func (m MockResponseWriterWithRecording) WriteHeader(int) {}
 
 func TestHandler_reply(t *testing.T) {
 	c := &config.Config{}
-<<<<<<< HEAD
-	r := http.Request{}
-	p := model.Path{}
-	p.Response = model.Response{Header: make(map[string]string)}
-	p.Response.Header["x"] = "y"
-	reply(MockResponseWriter{}, p, c, &r)
-
-	// file as response
-	p.Response.BodyRef = "../test/data/backend/fileresponse.json"
-	reply(MockResponseWriter{}, p, c, &r)
-
-	// template as response
-	p.Response.BodyRef = ""
-	p.Response.TemplateRef ="./test/data/backend/sample.tmpl"
-	reply(MockResponseWriter{}, p, c, &r)
-=======
 	p := model.Path{
 		Response: model.Response{
 			ContentType: "application/json",
@@ -239,7 +222,6 @@ func TestHandler_replyArray(t *testing.T) {
 	mrw := NewMockResponseWriterWithHeader()
 	reply(mrw, p, c)
 	assert.Equal(t, "[\"first\",\"second\"]", string(mrw.body))
->>>>>>> main
 }
 
 func TestHandler_ServeHTTP(t *testing.T) {

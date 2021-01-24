@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/prodyna/go-rest-mock/config"
 	"github.com/prodyna/go-rest-mock/model"
-	"github.com/prodyna/go-rest-mock/tmpl"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -84,7 +83,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "{ \"error\" : \"Body is invalid\" }")
 		return
 	}
-	
+
 	reqPath := req.URL.Path
 	method := req.Method
 	contentType := getContentType(req)
@@ -175,14 +174,11 @@ func reply(w http.ResponseWriter, path model.Path, cfg *config.Config, r *http.R
 	status := path.Response.Status
 	respContentType := path.Response.ContentType
 	var respBody []byte
-<<<<<<< HEAD
-=======
 	if path.Response.BodyRef != "" {
 		respBody, _ = ioutil.ReadFile(cfg.Path + "/" + path.Response.BodyRef)
 	} else {
 		respBody = path.Response.Body
 	}
->>>>>>> main
 
 	w.Header().Set(contentType, respContentType)
 
@@ -191,22 +187,7 @@ func reply(w http.ResponseWriter, path model.Path, cfg *config.Config, r *http.R
 	}
 
 	w.WriteHeader(status)
-<<<<<<< HEAD
-
-	if path.Response.BodyRef != "" {
-		respBody, _ = ioutil.ReadFile(cfg.Path + "/" + path.Response.BodyRef)
-		w.Write(respBody)
-	} else if path.Response.TemplateRef != "" {
-		tmpl.ConvertTemplate(w, cfg.Path + "/" + path.Response.TemplateRef, r)
-	} else {
-		body := path.Response.Body
-		respBody, _ = json.Marshal(body)
-		w.Write(respBody)
-	}
-
-=======
 	w.Write(respBody)
->>>>>>> main
 }
 
 // Save method for getting the content type
