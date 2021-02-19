@@ -16,6 +16,7 @@ type Response struct {
 	ContentType string            `json:"contentType"`
 	Body        json.RawMessage   `json:"body"`
 	BodyRef     string            `json:"bodyRef,omitempty"`
+	TemplateRef string            `json:"templateRef,omitempty"`
 	Header      map[string]string `json:"header,omitempty"`
 }
 

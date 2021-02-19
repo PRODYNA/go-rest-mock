@@ -1,0 +1,9 @@
+{
+  "path" : "{{ .URL.Path }}"
+  "method" : "{{ .Method }}"
+  "today" : "{{ DateIso }}"
+  "today" : "{{ DateFmt "2006-01-02" }}"
+  "MD5" : "{{ MD5 "Hello" }}"
+  "uuid" : "{{ Uuid }}"
+  "length" : "{{ Length "ABCD" }}"
+}

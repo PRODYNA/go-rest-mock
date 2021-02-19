@@ -194,7 +194,12 @@ func (m MockResponseWriterWithRecording) Header() http.Header {
 }
 
 func (m *MockResponseWriterWithRecording) Write(body []byte) (int, error) {
-	m.body = body
+	if m.body == nil {
+		m.body = body
+	} else {
+		m.body = append(m.body, body...)
+	}
+
 	return 0, nil
 }
 
@@ -208,7 +213,7 @@ func TestHandler_reply(t *testing.T) {
 		},
 	}
 	mrw := NewMockResponseWriterWithHeader()
-	reply(mrw, p, c)
+	reply(mrw, p, c, &http.Request{})
 	assert.Equal(t, "application/json", mrw.header.Get("Content-Type"))
 }
 
@@ -220,7 +225,7 @@ func TestHandler_replyArray(t *testing.T) {
 		},
 	}
 	mrw := NewMockResponseWriterWithHeader()
-	reply(mrw, p, c)
+	reply(mrw, p, c, &http.Request{})
 	assert.Equal(t, "[\"first\",\"second\"]", string(mrw.body))
 }
 
@@ -335,4 +340,37 @@ func TestHandler_ServeHTTP_NoValidation(t *testing.T) {
 	h.ServeHTTP(mrw, &r)
 
 	assert.Equal(t, string(mrw.body), "")
+}
+
+
+func Test_ServeTemplate(t *testing.T) {
+	c := &config.Config{}
+
+	p1 := model.Path{
+		Method:      "POST",
+		Path:        "/api/v1/book",
+		ContentType: "application/json",
+		Response:    model.Response{
+			TemplateRef: "../test/data/template/responseTemplate.tmpl",
+		},
+	}
+
+	m := model.MockDefinition{
+		Paths:    []model.Path{p1},
+		Validate: false,
+	}
+	h := NewHandler(&m, c)
+
+	r := http.Request{}
+	r.Header = http.Header{}
+
+	r.Method = "POST"
+	r.URL = &url.URL{Path: "/api/v1/book"}
+	r.Header["Content-Type"] = []string{"application/json"}
+	r.Body = ioutil.NopCloser(strings.NewReader(""))
+
+	mrw := NewMockResponseWriterWithHeader()
+	h.ServeHTTP(mrw, &r)
+
+	assert.Equal(t, "{  \"method\" : \"POST\" }\n", string(mrw.body))
 }
