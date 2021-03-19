@@ -48,5 +48,9 @@ func main() {
 func runServer(md *model.MockDefinition, cfg *config.Config) {
 	log.Println("Starting mock on port:", md.Port, "for backend:", md.ID)
 	log.SetFlags(log.Llongfile)
-	log.Fatal(http.ListenAndServe(":"+md.Port, handler.NewHandler(md, cfg)))
+	if md.TLS {
+		log.Fatal(http.ListenAndServeTLS(":"+md.Port, "server.crt", "server.key", handler.NewHandler(md, cfg)))
+	} else {
+		log.Fatal(http.ListenAndServe(":"+md.Port, handler.NewHandler(md, cfg)))
+	}
 }
