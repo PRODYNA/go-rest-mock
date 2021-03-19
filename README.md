@@ -1,6 +1,6 @@
 
-[![Project status](https://img.shields.io/badge/version-v0-green.svg)](https://github.com/prodyna/go-rest-mock/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/prodyna/go-rest-mock)](https://goreportcard.com/report/github.com/prodyna/go-rest-mock)
+[![Project status](https://img.shields.io/badge/version-v0-green.svg)](https://github.com/placons/go-rest-mock/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/placons/go-rest-mock)](https://goreportcard.com/report/github.com/placons/go-rest-mock)
 [![License](https://img.shields.io/dub/l/vibe-d.svg)](LICENSE)
 [![Coverage Status](https://coveralls.io/repos/github/PRODYNA/go-rest-mock/badge.svg?branch=main)](https://coveralls.io/github/PRODYNA/go-rest-mock?branch=main)
 # go-rest-mock

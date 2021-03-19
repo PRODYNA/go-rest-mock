@@ -2,8 +2,8 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/prodyna/go-rest-mock/config"
-	"github.com/prodyna/go-rest-mock/model"
+	"github.com/placons/go-rest-mock/config"
+	"github.com/placons/go-rest-mock/model"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
@@ -342,7 +342,6 @@ func TestHandler_ServeHTTP_NoValidation(t *testing.T) {
 	assert.Equal(t, string(mrw.body), "")
 }
 
-
 func Test_ServeTemplate(t *testing.T) {
 	c := &config.Config{}
 
@@ -350,7 +349,7 @@ func Test_ServeTemplate(t *testing.T) {
 		Method:      "POST",
 		Path:        "/api/v1/book",
 		ContentType: "application/json",
-		Response:    model.Response{
+		Response: model.Response{
 			TemplateRef: "../test/data/template/responseTemplate.tmpl",
 		},
 	}
