@@ -34,7 +34,7 @@ Build the binary
 * Setting of response headers
 * Setting of content type of the response
 * Request Validation (Json)
-
+* HTTPs support with a dummy certificate (client has to trust all certificates)
 
 ## TODOs
 
@@ -71,6 +71,7 @@ This can be called with e.g. http://localhost:9000/account/1234 in a browser.
 {
   "id": "backend",
   "port": "9000",
+  "tls": false
   "paths": [
     {
       "method": "GET",
