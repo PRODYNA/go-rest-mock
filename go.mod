@@ -1,4 +1,4 @@
-module github.com/placons/go-rest-mock
+module github.com/prodyna/go-rest-mock
 
 go 1.15
 

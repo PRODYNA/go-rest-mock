@@ -2,7 +2,7 @@ package reader
 
 import (
 	"encoding/json"
-	"github.com/placons/go-rest-mock/model"
+	"github.com/prodyna/go-rest-mock/model"
 	"io/ioutil"
 	"log"
 	"os"

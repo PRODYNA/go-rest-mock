@@ -95,5 +95,7 @@ main
 # Swagger directory
 docs/
 
+coverage.out
 cover.out
+cp.out
 go-rest-mock

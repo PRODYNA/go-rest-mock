@@ -3,9 +3,9 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/placons/go-rest-mock/config"
-	"github.com/placons/go-rest-mock/model"
-	"github.com/placons/go-rest-mock/tmpl"
+	"github.com/prodyna/go-rest-mock/config"
+	"github.com/prodyna/go-rest-mock/model"
+	"github.com/prodyna/go-rest-mock/tmpl"
 	"io/ioutil"
 	"net/http"
 	"strings"

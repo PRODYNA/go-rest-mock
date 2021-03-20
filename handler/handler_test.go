@@ -2,8 +2,8 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/placons/go-rest-mock/config"
-	"github.com/placons/go-rest-mock/model"
+	"github.com/prodyna/go-rest-mock/config"
+	"github.com/prodyna/go-rest-mock/model"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"

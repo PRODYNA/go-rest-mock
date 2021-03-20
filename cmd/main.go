@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/placons/go-rest-mock/config"
-	"github.com/placons/go-rest-mock/handler"
-	"github.com/placons/go-rest-mock/model"
-	"github.com/placons/go-rest-mock/reader"
-	"github.com/placons/go-rest-mock/tlsserver"
+	"github.com/prodyna/go-rest-mock/config"
+	"github.com/prodyna/go-rest-mock/handler"
+	"github.com/prodyna/go-rest-mock/model"
+	"github.com/prodyna/go-rest-mock/reader"
+	"github.com/prodyna/go-rest-mock/tlsserver"
 	"log"
 	"net/http"
 	"path/filepath"
