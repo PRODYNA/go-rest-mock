@@ -8,6 +8,7 @@ type MockDefinition struct {
 	Port     string `json:"port"`
 	Paths    []Path `json:"paths"`
 	Validate bool   `json:"validate"`
+	TLS      bool   `json:"tls"`
 }
 
 // Response definition

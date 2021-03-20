@@ -190,7 +190,7 @@ func reply(w http.ResponseWriter, path model.Path, cfg *config.Config, r *http.R
 	w.WriteHeader(status)
 
 	if path.Response.TemplateRef != "" {
-		tmpl.ConvertTemplate(w,path.Response.TemplateRef, r)
+		tmpl.ConvertTemplate(w, path.Response.TemplateRef, r)
 	} else {
 		w.Write(respBody)
 	}
